@@ -1,0 +1,37 @@
+---
+  - hosts: zabbix
+#    roles:
+#      - zabbix-server
+    user: vagrant
+    sudo: yes
+    tasks:
+     - name: Install ntp
+       yum: name=ntp state=installed
+     - name: run ntp
+       service: name=ntpd state=started enabled=yes
+     
+     - name: Install Apache server
+       yum: name=httpd state=installed
+     - name: start Apache server
+       service: name=httpd state=started enabled=yes
+ 
+     - name: Install MySQL(mariadb)
+       yum: pkg={{item}} state=installed
+       with_items:
+         - zabbix-server-mysql
+         - zabbix-web-mysql
+         - zabbix-agent
+         - mysql 
+         - mariadb-server
+         - php 
+   
+
+
+
+#    - name: install Zabbix repo for CentOS7
+#      template: src=zabbix.repo.j2
+#                dest=/etc/yum.repos.d/zabbix.repo
+#                owner=root
+#                group=root
+#                mode=0644
+#      when: zabbix_repo
