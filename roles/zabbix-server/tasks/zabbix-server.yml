@@ -9,15 +9,14 @@
        yum: name=ntp state=installed
      - name: run ntp
        service: name=ntpd state=started enabled=yes
-     
+
      - name: Install Apache server
        yum: name=httpd state=installed
      - name: start Apache server
        service: name=httpd state=started enabled=yes
+
      - name: Install Zabbix Repository Key 
        rpm_key: state=present key=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX
-
-
      - name: Install Zabbix Repository and other packages needed by Ansible
        yum: pkg={{item}} state=installed  
        with_items:
@@ -39,17 +38,24 @@
    
      - name: RUN Marriadb
        service: name=mariadb.service state=started enabled=yes
-#     - name: Create zabbix database
-#       mysql_db: name=zabbix state=present collation=utf8_bin
-#     - name: Create Zabbix user and grant permissions
-#       mysql_user: name=zabbix password=zabbix priv=zabbix.*:ALL host=localhost state=present 
-#     - name: Import initial schema
-#       mysql_db: name=zabbix state=import target={{item}}
-#       with_items:
-#         - /usr/share/doc/zabbix-server-mysql-2.4.7/create/schema.sql
-#         - /usr/share/doc/zabbix-server-mysql-2.4.7/create/images.sql
-#         - /usr/share/doc/zabbix-server-mysql-2.4.7/create/data.sql
-     
+     - name: Create zabbix database
+       mysql_db: name=zabbix state=present collation=utf8_bin
+     - name: Create Zabbix user and grant permissions
+       mysql_user: name=zabbix password=zabbix priv=zabbix.*:ALL host=localhost state=present 
+     - name: Import initial schema
+       mysql_db: name=zabbix state=import target={{item}}
+       with_items:
+         - /usr/share/doc/zabbix-server-mysql-2.4.7/create/schema.sql
+         - /usr/share/doc/zabbix-server-mysql-2.4.7/create/images.sql
+         - /usr/share/doc/zabbix-server-mysql-2.4.7/create/data.sql
+     - name: Configure SELinux 
+       seboolean: name=httpd_can_network_connect state=yes persistent=yes
+
+     - name: Run MariaDB
+       service: name=mariadb.service state=restarted enabled=yes
+
+     - name: Restart Zabbix Server
+       service: name=zabbix-server enabled=true state=restarted 
 
 
 
