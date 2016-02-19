@@ -1,0 +1,32 @@
+---
+  - hosts: zabbix
+    vars:
+      zabbix_server: 192.168.22.14/zabbix
+      zabbix_user: Admin
+      zabbix_password: zabbix
+    user: vagrant
+    become: yes
+    tasks:
+        - name: ADD host
+          action:
+              module: zabbix_host
+#              host_name: repo1
+              server_url: http://{{ zabbix_server }}
+              login_user: '$zabbix_user'
+              login_password: zabbix
+              host_name: repo1
+              host_groups: 
+                - REPO
+#                    - REPO
+#                      link_templates=myt1
+#                    - myt1
+#                    - myt2
+              status: enabled
+              state: present
+              interfaces:
+                - type: 1
+                  main: 1
+                  useip: 1
+                  ip: 192.168.192.10
+                  dns: "repo1"
+                  port: 10050

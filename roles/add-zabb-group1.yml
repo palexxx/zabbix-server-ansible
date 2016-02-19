@@ -1,0 +1,19 @@
+---
+   - hosts: zabbix
+     tasks:
+      - name: Create host groups
+        action:
+          module: zabbix_group
+          server_url: http://192.168.22.14/zabbix
+          login_user: Admin
+          login_password: zabbix
+          state: present
+          host_groups:
+            - Databases
+            - WEBs
+            - LOGserver
+            - REPO
+            - jenkins
+            - balancer
+            - ansible
+    
