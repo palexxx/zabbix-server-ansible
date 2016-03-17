@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # config file for ansible -- http://ansible.com/
 # ==============================================
 
@@ -228,3 +229,11 @@ accelerate_daemon_timeout = 30
 # the default behaviour that copies the existing context or uses the user default
 # needs to be changed to use the file system dependant context.
 #special_context_filesystems=nfs,vboxsf,fuse
+=======
+[defaults]
+host_key_checking = False
+inventory         = hosts
+sudo_user         = root
+sudo_exe          = sudo
+
+>>>>>>> e13e8637cf5386658890243f6010caab5fca1523
